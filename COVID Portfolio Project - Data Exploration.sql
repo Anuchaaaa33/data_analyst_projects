@@ -94,7 +94,45 @@ Join PortfolioProject..CovidVaccinations vac
 	and dea.date = vac.date
 where dea.continent is not null 
 order by 2,3
+-- What is the total reported COVID death count in India?
+-- Why it matters: Establishes baseline severity for country-specific analysis.
 
+SELECT
+    location,
+    MAX(CAST(total_deaths AS INT)) AS total_covid_deaths
+FROM PortfolioProject..CovidDeaths
+WHERE location = 'India'
+GROUP BY location;
+
+-- What was vaccination coverage in India during peak COVID deaths?
+-- Why it matters: Helps assess relationship between vaccination rollout and mortality.
+
+WITH IndiaDeaths AS (
+    SELECT
+        date,
+        CAST(new_deaths AS INT) AS new_deaths
+    FROM PortfolioProject..CovidDeaths
+    WHERE location = 'India'
+),
+IndiaVaccinations AS (
+    SELECT
+        dea.date,
+        SUM(CONVERT(INT, vac.new_vaccinations))
+        OVER (ORDER BY dea.date) AS rolling_vaccinated
+    FROM PortfolioProject..CovidDeaths dea
+    JOIN PortfolioProject..CovidVaccinations vac
+        ON dea.location = vac.location
+        AND dea.date = vac.date
+    WHERE dea.location = 'India'
+)
+SELECT
+    d.date,
+    d.new_deaths,
+    v.rolling_vaccinated
+FROM IndiaDeaths d
+JOIN IndiaVaccinations v
+    ON d.date = v.date
+ORDER BY d.new_deaths DESC;
 
 -- Using CTE to perform Calculation on Partition By in previous query
 
@@ -115,6 +153,29 @@ Select *, (RollingPeopleVaccinated/Population)*100
 From PopvsVac
 
 
+-- Did average daily deaths decrease after vaccination rollout?
+-- Why it matters: Evaluates impact of a major public health intervention.
+
+WITH VaccinationStart AS (
+    SELECT MIN(date) AS first_vaccine_date
+    FROM PortfolioProject..CovidVaccinations
+    WHERE location = 'India'
+      AND new_vaccinations IS NOT NULL
+)
+SELECT
+    CASE
+        WHEN d.date < v.first_vaccine_date THEN 'Before Vaccination'
+        ELSE 'After Vaccination'
+    END AS period,
+    AVG(CAST(d.new_deaths AS INT)) AS avg_daily_deaths
+FROM PortfolioProject..CovidDeaths d
+CROSS JOIN VaccinationStart v
+WHERE d.location = 'India'
+GROUP BY
+    CASE
+        WHEN d.date < v.first_vaccine_date THEN 'Before Vaccination'
+        ELSE 'After Vaccination'
+    END;
 
 -- Using Temp Table to perform Calculation on Partition By in previous query
 
@@ -157,5 +218,6 @@ Join PortfolioProject..CovidVaccinations vac
 	On dea.location = vac.location
 	and dea.date = vac.date
 where dea.continent is not null 
+
 
 
