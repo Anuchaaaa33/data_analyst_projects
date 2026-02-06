@@ -2,7 +2,7 @@
 # COVID-19 SQL Data Exploration Project
 This repository contains a SQL-based data exploration project using a global COVID-19 dataset.
 
-Key Analyses Added
+Key Analyses Added:
 
 India-specific mortality analysis to quantify the total reported COVID-19 death burden.
 
