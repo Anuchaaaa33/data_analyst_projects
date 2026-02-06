@@ -1,7 +1,17 @@
 # Data Analyst Portfolio Project Repository
+# COVID-19 SQL Data Exploration Project
+This repository contains a SQL-based data exploration project using a global COVID-19 dataset.
 
-This Repository will hold all of the code and queries from the Portfolio Projects we create.
+Key Analyses Added
 
-Please feel free to take these and run with them. Make them your own and find you own insights
+India-specific mortality analysis to quantify the total reported COVID-19 death burden.
 
-I really do hope this is helpful and helps you land that dream job! :D
+Vaccination coverage analysis to track rollout progress over time.
+
+Pre- vs post-vaccination comparison to assess whether average COVID-19 death rates declined following the introduction of vaccines.
+
+Skills and Techniques Used
+
+Complex SQL queries using JOINs, CTEs, window functions, and aggregate functions
+
+Time-based trend analysis and comparative segmentation
