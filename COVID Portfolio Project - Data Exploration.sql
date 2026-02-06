@@ -20,8 +20,7 @@ order by 1,2
 
 
 -- Total Cases vs Total Deaths
--- Shows likelihood of dying if you contract covid in your country
-
+	
 Select Location, date, total_cases,total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
 From PortfolioProject..CovidDeaths
 Where location like '%states%'
@@ -30,7 +29,6 @@ order by 1,2
 
 
 -- Total Cases vs Population
--- Shows what percentage of population infected with Covid
 
 Select Location, date, Population, total_cases,  (total_cases/population)*100 as PercentPopulationInfected
 From PortfolioProject..CovidDeaths
@@ -83,8 +81,7 @@ order by 1,2
 
 
 -- Total Population vs Vaccinations
--- Shows Percentage of Population that has recieved at least one Covid Vaccine
-
+	
 Select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
 , SUM(CONVERT(int,vac.new_vaccinations)) OVER (Partition by dea.Location Order by dea.location, dea.Date) as RollingPeopleVaccinated
 --, (RollingPeopleVaccinated/population)*100
@@ -94,8 +91,8 @@ Join PortfolioProject..CovidVaccinations vac
 	and dea.date = vac.date
 where dea.continent is not null 
 order by 2,3
+	
 -- What is the total reported COVID death count in India?
--- Why it matters: Establishes baseline severity for country-specific analysis.
 
 SELECT
     location,
@@ -105,7 +102,6 @@ WHERE location = 'India'
 GROUP BY location;
 
 -- What was vaccination coverage in India during peak COVID deaths?
--- Why it matters: Helps assess relationship between vaccination rollout and mortality.
 
 WITH IndiaDeaths AS (
     SELECT
@@ -218,6 +214,7 @@ Join PortfolioProject..CovidVaccinations vac
 	On dea.location = vac.location
 	and dea.date = vac.date
 where dea.continent is not null 
+
 
 
 
