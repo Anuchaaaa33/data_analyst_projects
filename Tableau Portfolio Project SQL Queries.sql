@@ -1,12 +1,21 @@
 /*
+COVID-19 Tableau Analysis – Decision-Oriented SQL Queries
 
-Queries used for Tableau Project
+Purpose:
+These queries were designed to support high-level public health analysis
+and country-level deep dives for visualization in Tableau.
+
+Focus areas:
+- Global severity and mortality
+- Country-level impact (India)
+- Vaccination rollout and its association with death rates
 
 */
 
 
 
--- 1. 
+-- GLOBAL COVID-19 SEVERITY OVERVIEW
+-- What is the overall scale and mortality of COVID-19 globally?
 
 Select SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as DeathPercentage
 From PortfolioProject..CovidDeaths
@@ -14,18 +23,6 @@ From PortfolioProject..CovidDeaths
 where continent is not null 
 --Group By date
 order by 1,2
-
--- Just a double check based off the data provided
--- numbers are extremely close so we will keep them - The Second includes "International"  Location
-
-
---Select SUM(new_cases) as total_cases, SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/SUM(New_Cases)*100 as DeathPercentage
---From PortfolioProject..CovidDeaths
-----Where location like '%states%'
---where location = 'World'
-----Group By date
---order by 1,2
-
 
 -- 2. 
 
@@ -69,9 +66,6 @@ order by PercentPopulationInfected desc
 
 
 
-
--- Queries I originally had, but excluded some because it created too long of video
--- Here only in case you want to check them out
 
 
 -- 1.
@@ -179,6 +173,7 @@ From PortfolioProject..CovidDeaths
 --Where location like '%states%'
 Group by Location, Population, date
 order by PercentPopulationInfected desc
+
 
 
 
